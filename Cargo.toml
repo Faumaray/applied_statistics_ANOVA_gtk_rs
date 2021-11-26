@@ -2,7 +2,9 @@
 name = "applied_statistics_ANOVA_gtk_rs"
 version = "0.1.0"
 edition = "2021"
-authors = ["Faumaray - Selikhov Aleksey", "Lagg1ing - Geranin Arseniy", "KoKo - Karasev Georgiy"]
+authors = ["Faumaray - Selikhov Aleksey", "Lagg1ing - Geranin Arseniy", "TonightLight - Karasev Georgiy"]
+readme = "README.md"
+description = "A program for teaching students analysis of variance, created within the framework of teaching the course in applied statistics, by students of the MOIS-91 group."
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
