@@ -1,0 +1,9 @@
+[package]
+name = "applied_statistics_ANOVA_gtk_rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["Faumaray - Selikhov Aleksey", "Lagg1ing - Geranin Arseniy", "KoKo - Karasev Georgiy"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+gtk = {version = "^0.3", package = "gtk4"}
