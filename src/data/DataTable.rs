@@ -1,3 +1,4 @@
+use super::ResultVars::*;
 pub struct DataTable // Временная имплементация структуры 
 {
     pub groups: Vec<Variable>,
@@ -117,3 +118,36 @@ impl Variable
         }
     }
 }
+
+pub struct ResultTwoWayWithoutReps
+{
+    ss: SSTwoWay,
+    df: DFTwoWay,
+    ms: MSTwoWay,
+    f: FTwoWay,
+    p: PTwoWay,
+    f_crit: FCritTwoWay
+}
+pub struct ResultOneWay
+{
+    ss: SSOneWay,
+    df: DFOneWay,
+    ms: MSOneWay,
+    f: FOneWay,
+    p: POneWay,
+    f_crit: FCritOneWay
+}
+
+pub fn two_way_without_reps(table: DataTable, alfa:f64) -> ResultTwoWayWithoutReps
+{
+    unimplemented!();
+}
+
+pub fn one_way(table: DataTable, alfa:f64) -> ResultOneWay
+{
+    unimplemented!();
+}
+/*
+Все структуры были составлены на основе результатов EXCEL, возможно нужны другие судя по "методичке"
+
+*/
