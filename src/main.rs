@@ -1,7 +1,7 @@
-#![windows_subsystem = "windows"]
 
+mod data;
+use data::DataTable::*;
 use gtk::prelude::*;
-
 use gtk::glib::clone;
 use gtk::glib::signal::Inhibit;
 use gtk::{Application, TextBuffer, TextView};
@@ -14,8 +14,7 @@ fn main() {
     application.run();
 }
 fn build_ui(application: &Application) {
-    let window = Rc::new(gtk::ApplicationWindow::new(application));
-
+    let mut window = Rc::new(gtk::ApplicationWindow::new(application));
     window.set_title(Some("ANOVA"));
     window.set_default_size(900, 720);
     window.set_resizable(false);
