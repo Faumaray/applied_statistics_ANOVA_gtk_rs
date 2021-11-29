@@ -1,4 +1,5 @@
 use super::ResultVars::*;
+use super::Support::p_value;
 pub struct DataTable // Временная имплементация структуры 
 {
     pub groups: Vec<Variable>,
@@ -134,8 +135,7 @@ pub struct ResultOneWay
     df: DFOneWay,
     ms: MSOneWay,
     f: FOneWay,
-    p: POneWay,
-    f_crit: FCritOneWay
+    p: f64
 }
 
 pub fn two_way_without_reps(table: DataTable, alfa:f64) -> ResultTwoWayWithoutReps
