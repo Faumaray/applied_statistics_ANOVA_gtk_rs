@@ -45,11 +45,3 @@ pub struct FOneWay{
     inside: f64,
     beetwen: f64
 }
-pub struct POneWay{
-    inside: f64,
-    beetwen: f64
-}
-pub struct FCritOneWay{
-    inside: f64,
-    beetwen: f64
-}
