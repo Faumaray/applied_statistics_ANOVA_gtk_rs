@@ -3,14 +3,14 @@ use super::Support::p_value;
 pub struct DataTable // Временная имплементация структуры 
 {
     pub groups: Vec<Variable>,
-    pub count_of_groups_by_rows: Vec<usize>,
-    pub count_of_groups_by_columns: Vec<usize>,
-    pub sum_of_groups_by_rows: Vec<f64>,
-    pub sum_of_groups_by_columns: Vec<f64>,
-    pub mean_of_groups_by_rows: Vec<f64>,
-    pub mean_of_groups_by_columns: Vec<f64>,
-    pub dispersion_of_groups_by_rows: Vec<f64>,
-    pub dispersion_of_groups_by_columns: Vec<f64>,
+    pub count_of_groups_by_rows: Vec<usize>,// по строкам
+    pub count_of_groups_by_columns: Vec<usize>,// по столбцам
+    pub sum_of_groups_by_rows: Vec<f64>,// сумма по строкам
+    pub sum_of_groups_by_columns: Vec<f64>,// сумма по столбцам
+    pub mean_of_groups_by_rows: Vec<f64>,// среднее по строкам
+    pub mean_of_groups_by_columns: Vec<f64>,// среднее по столбцам
+    pub dispersion_of_groups_by_rows: Vec<f64>,// дисперсия по строкам
+    pub dispersion_of_groups_by_columns: Vec<f64>,// дисперсия по столбцам
 }
 impl DataTable
 {
@@ -138,13 +138,30 @@ pub struct ResultOneWay
     p: f64
 }
 
-pub fn two_way_without_reps(table: DataTable, alfa:f64) -> ResultTwoWayWithoutReps
+pub fn two_way_without_reps(table: DataTable, alfa:f64) -> ResultTwoWayWithoutReps //многофакторный дисперсионный анализ
 {
     unimplemented!();
 }
 
-pub fn one_way(table: DataTable, alfa:f64) -> ResultOneWay
+pub fn one_way(table: DataTable, alfa:f64) -> ResultOneWay //однофакторный дисперсионный анализ
 {
+    /* вид формулы
+    х = все ячейки/кол-во этих ячеек
+    ss = (х_столбцовый -х^2) - суммирутся между собой 
+    столько раз, сколько у нас толбцов
+    SSe(вроде тот что между группами) = Сумма по кол-ву строк (n-1) * (диспесия по строке^2)
+    SSa(вроде как тот что внутри групп) = Сумма по кол-ву столбцов(х_столбцовый(i)-х)
+
+
+
+    MSe = SSe/a-1 (а - кол-во строк)
+    MSa = SSa/n-a
+    F = MSa/MSe
+    dfe =SSe/MSe
+    dfa =SSa/MSa
+
+     
+    */
     unimplemented!();
 }
 /*
