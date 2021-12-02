@@ -1,31 +1,37 @@
+#[derive(Debug)]
 pub struct SSTwoWay{
-    rows: f64,
-    cols: f64,
-    error: f64,
-    sum: f64
+    pub rows: f64,
+    pub cols: f64,
+    pub error: f64,
+    pub sum: f64
 }
+#[derive(Debug)]
 pub struct DFTwoWay{
-    rows: usize,
-    cols: usize,
-    error: usize,
-    sum: usize
+    pub rows: f64,
+    pub cols: f64,
+    pub error: f64,
+    pub sum: f64
 }
+#[derive(Debug)]
 pub struct MSTwoWay{
-    rows: f64,
-    cols: f64,
-    error: f64
+    pub rows: f64,
+    pub cols: f64,
+    pub error: f64
 }
+#[derive(Debug)]
 pub struct FTwoWay{
-    rows: f64,
-    cols: f64
+    pub rows: f64,
+    pub cols: f64
 }
+#[derive(Debug)]
 pub struct PTwoWay{
-    rows: f64,
-    cols: f64
+    pub rows: f64,
+    pub cols: f64
 }
+#[derive(Debug)]
 pub struct FCritTwoWay{
-    rows: f64,
-    cols: f64
+    pub rows: f64,
+    pub cols: f64
 }
 #[derive(Debug)]
 pub struct SSOneWay{
