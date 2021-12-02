@@ -27,20 +27,21 @@ pub struct FCritTwoWay{
     rows: f64,
     cols: f64
 }
-#[derive(Debug)]
 pub struct SSOneWay{
-    pub inside: f64,
-    pub between: f64,
-    pub sum: f64
+    inside: f64,
+    between: f64,
+    sum: f64
 }
-#[derive(Debug)]
 pub struct DFOneWay{
-    pub inside: f64,
-    pub between: f64,
-    pub sum: f64
+    inside: usize,
+    between: usize,
+    sum: usize
 }
-#[derive(Debug)]
 pub struct MSOneWay{
-    pub inside: f64,
-    pub between: f64
+    inside: f64,
+    between: f64
+}
+pub struct FOneWay{
+    inside: f64,
+    beetwen: f64
 }
