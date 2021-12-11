@@ -1,38 +1,16 @@
+#![windows_subsystem = "windows"]
 mod data;
 use data::dataTable::*;
-use gtk::cairo::Context;
-use gtk::cairo::Format;
-use gtk::cairo::ImageSurface;
 use gtk::cairo::Surface;
 use gtk::prelude::*;
 use gtk::Application;
-use gtk::{gio, glib::clone};
-use std::{cell::RefCell, rc::Rc};
+use gtk::{cairo::Context, glib::WeakRef};
+use gtk::{cairo::ImageSurface, glib::clone};
+use gtk::{gio, glib::clone::Downgrade, glib::clone::*};
+use std::{cell::RefCell, collections::HashMap, rc::Rc};
 use std::{fs::File, io::Read};
 
 fn main() {
-    // Тестовые величины
-    let var1 = Variable::new(vec![
-        1.82307, 1.337521, 0.709904, 0.706639, 1.37292, 0.755022,
-    ]);
-    let var2 = Variable::new(vec![
-        1.763353, 1.404699, -0.15568, 0.974917, 0.739462, 0.841902,
-    ]);
-    let var3 = Variable::new(vec![
-        2.057529, 1.081195, 0.86748, 0.66569, 1.010997, 1.793682,
-    ]);
-    let var4 = Variable::new(vec![
-        1.018306, 0.393067, 1.573685, 0.171241, 1.32679, 1.305396,
-    ]);
-    let var5 = Variable::new(vec![
-        0.80303, 1.252988, 1.944237, 0.362799, 0.650761, 0.37149,
-    ]);
-    let table = DataTable::new(vec![var1, var2, var3, var4, var5]);
-    //Тестовая зона
-    let one_way_columns = table.one_way(0.05, true);
-    let one_way_rows = table.one_way(0.05, false);
-    let two_way = table.two_way_without_reps(0.05);
-    //Конец тестовой зоны
     let application = gtk::Application::new(
         Some("com.github.Faumaray.applied_statistics_ANOVA_gtk_rs"),
         Default::default(),
@@ -45,7 +23,7 @@ fn build_ui(application: &Application) {
     let window = Rc::new(gtk::ApplicationWindow::new(application));
     window.set_title(Some("ANOVA"));
     window.set_default_size(1280, 720);
-    window.set_resizable(true);
+    window.set_resizable(false);
     let main_box: gtk::Box = gtk::Box::new(gtk::Orientation::Horizontal, 10);
     main_box.set_margin_top(15);
     main_box.set_margin_bottom(15);
@@ -157,30 +135,132 @@ fn build_ui(application: &Application) {
     main_box.append(&right_box);
 
     let mut entrys_list = Rc::new(RefCell::new(matrix {
-        entrys: Vec::<gtk::Entry>::new(),
+        entrys: Vec::<Vec<gtk::Entry>>::new(),
     }));
-    button_show.connect_clicked(move |_| {
+    let s_for_init = Rc::clone(&entrys_list);
+    let s_for_rows = Rc::clone(&entrys_list);
+    let s_for_cols = Rc::clone(&entrys_list);
+    let s_for_two = Rc::clone(&entrys_list);
+    button_show.connect_clicked(clone!(@strong flow_box => move |_| {
         let variables_count: usize = variables_count_buffer.text().parse().unwrap();
         let matrix_count: usize = matrix_count_buffer.text().parse().unwrap();
-        if entrys_list.borrow().entrys.len() != 0 {
-            for entry in &entrys_list.borrow().entrys {
-                flow_box.remove(&entry.parent().unwrap());
+        if s_for_init.borrow().entrys.len() != 0 {
+            for row in &s_for_init.borrow().entrys {
+                for ent in row
+                {
+                    flow_box.remove(&ent.parent().unwrap());
+                }
+
             }
-            entrys_list.borrow_mut().entrys = Vec::<gtk::Entry>::new();
+            s_for_init.borrow_mut().entrys = Vec::<Vec<gtk::Entry>>::new();
         }
         flow_box.set_max_children_per_line(variables_count as u32);
         flow_box.set_min_children_per_line(variables_count as u32);
         for _i in 0..variables_count {
+            let mut tmp = Vec::new();
             for _j in 0..matrix_count {
-                let entry = gtk::Entry::new();
+                let entry = gtk::Entry::builder().input_purpose(gtk::InputPurpose::Digits).build();
                 flow_box.insert(&entry, -1);
-                entrys_list.borrow_mut().entrys.push(entry);
+                tmp.push(entry);
+
             }
+            tmp.shrink_to_fit();
+            s_for_init.borrow_mut().entrys.push(tmp);
         }
-    });
+    }));
+    one_way_cols.connect_clicked(clone!(@strong application =>move |_| {
+        let mut vars: Vec<Variable> = Vec::new();
+        for i in 0..s_for_cols.borrow().entrys.len() as usize {
+            for j in
+                0..s_for_cols.borrow().entrys[0].len()
+            {
+                let mut var: Vec<f64> = Vec::new();
+                for k in 0..s_for_cols.borrow().entrys.len() {
+                    var.push(s_for_cols.borrow().entrys[k][j].text().parse().unwrap());
+                }
+                var.shrink_to_fit();
+                vars.push(Variable::new(var));
+            }
+            break;
+        }
+        let table = DataTable::new(vars);
+        create_one_way_window(&application, &table, true, 0.95);
+    }));
+    one_way_rows.connect_clicked(clone!(@strong application =>move |_| {
+        let mut vars: Vec<Variable> = Vec::new();
+        for i in 0..s_for_rows.borrow().entrys.len() as usize {
+            for j in
+                0..s_for_rows.borrow().entrys[0].len()
+            {
+                let mut var: Vec<f64> = Vec::new();
+                for k in 0..s_for_rows.borrow().entrys.len() {
+                    var.push(s_for_rows.borrow().entrys[k][j].text().parse().unwrap());
+                }
+                var.shrink_to_fit();
+                vars.push(Variable::new(var));
+            }
+            break;
+        }
+        let table = DataTable::new(vars);
+        create_one_way_window(&application, &table, false, 0.95);
+    }));
+    two_way.connect_clicked(clone!(@strong application =>move |_| {
+        let mut vars: Vec<Variable> = Vec::new();
+        for i in 0..s_for_two.borrow().entrys.len() as usize {
+            for j in
+                0..s_for_two.borrow().entrys[0].len()
+            {
+                let mut var: Vec<f64> = Vec::new();
+                for k in 0..s_for_two.borrow().entrys.len() {
+                    var.push(s_for_two.borrow().entrys[k][j].text().parse().unwrap());
+                }
+                var.shrink_to_fit();
+                vars.push(Variable::new(var));
+            }
+            break;
+        }
+        let table = DataTable::new(vars);
+        create_two_way_window(&application, &table, 0.95);
+    }));
     window.set_child(Some(&main_box));
     window.show();
 }
 struct matrix {
-    entrys: Vec<gtk::Entry>,
+    entrys: Vec<Vec<gtk::Entry>>,
+}
+fn create_one_way_window(
+    application: &gtk::Application,
+    table: &DataTable,
+    by_columns: bool,
+    alpha: f64,
+) {
+    let Result = table.one_way(alpha, by_columns);
+    let window = gtk::Window::builder()
+        .application(application)
+        .focus_on_click(true)
+        .sensitive(true)
+        .resizable(false)
+        .startup_id("One way")
+        .modal(false)
+        .build();
+
+    window.set_title(Some("One way ANOVA"));
+    window.set_default_size(400, 200);
+
+    window.show();
+}
+fn create_two_way_window(application: &gtk::Application, table: &DataTable, alpha: f64) {
+    let Result = table.two_way_without_reps(alpha);
+    let window = gtk::Window::builder()
+        .application(application)
+        .focus_on_click(true)
+        .sensitive(true)
+        .resizable(false)
+        .startup_id("Two way")
+        .modal(false)
+        .build();
+    window.set_title(Some("One way ANOVA"));
+    window.set_default_size(400, 200);
+
+    window.show();
 }
