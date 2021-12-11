@@ -1,5 +1,5 @@
 [package]
-name = "applied_statistics_ANOVA_gtk_rs"
+name = "applied_statistics_anova_gtk_rs"
 version = "0.1.0"
 edition = "2021"
 authors = ["Faumaray - Selikhov Aleksey", "Lagg1ing - Geranin Arseniy", "TonightLight - Karasev Georgiy"]
@@ -10,3 +10,4 @@ description = "A program for teaching students analysis of variance, created wit
 
 [dependencies]
 gtk = {version = "^0.3", package = "gtk4"}
+poppler-rs ="0.18.2"

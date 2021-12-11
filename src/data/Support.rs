@@ -1,5 +1,5 @@
-use std::result::Result;
 use std::io::Error;
+use std::result::Result;
 const GAMMA_DK: &[f64] = &[
     2.48574089138753565546e-5,
     1.05142378581721974210,
@@ -24,28 +24,35 @@ pub fn p_value(freedom_1: f64, freedom_2: f64, x: f64) -> f64 {
     } else if x.is_infinite() {
         1.0
     } else {
-        1.0-checked_beta_reg(
+        1.0 - checked_beta_reg(
             freedom_1 / 2.0,
             freedom_2 / 2.0,
             freedom_1 * x / (freedom_1 * x + freedom_2),
-        ).unwrap()
+        )
+        .unwrap()
     }
 }
 fn checked_beta_reg(a: f64, b: f64, x: f64) -> Result<f64, Error> {
     if a <= 0.0 {
-        Err(Error::new(std::io::ErrorKind::InvalidInput, "a must be positive")) // Попра
+        Err(Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "a must be positive",
+        )) // Попра
     } else if b <= 0.0 {
-        Err(Error::new(std::io::ErrorKind::InvalidInput, "b must be positive"))
+        Err(Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "b must be positive",
+        ))
     } else if !(0.0..=1.0).contains(&x) {
-        Err(Error::new(std::io::ErrorKind::InvalidInput, "x must be >=0.0 and <=1.0"))
+        Err(Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "x must be >=0.0 and <=1.0",
+        ))
     } else {
-        let bt = if x==0.0 || x==1.0 {
+        let bt = if x == 0.0 || x == 1.0 {
             0.0
         } else {
-            (ln_gamma(a + b) - ln_gamma(a) - ln_gamma(b)
-                + a * x.ln()
-                + b * (1.0 - x).ln())
-            .exp()
+            (ln_gamma(a + b) - ln_gamma(a) - ln_gamma(b) + a * x.ln() + b * (1.0 - x).ln()).exp()
         };
         let symm_transform = x >= (a + 1.0) / (a + b + 2.0);
         let eps = F64_PREC;
@@ -144,8 +151,6 @@ fn ln_gamma(x: f64) -> f64 {
             .skip(1)
             .fold(GAMMA_DK[0], |s, t| s + t.1 / (x + t.0 as f64 - 1.0));
 
-        s.ln()
-            + LN_2_SQRT_E_OVER_PI
-            + (x - 0.5) * ((x - 0.5 + GAMMA_R) / std::f64::consts::E).ln()
+        s.ln() + LN_2_SQRT_E_OVER_PI + (x - 0.5) * ((x - 0.5 + GAMMA_R) / std::f64::consts::E).ln()
     }
 }
