@@ -12,6 +12,7 @@ checksum = "62e1f47f7dc0422027a4e370dd4548d4d66b26782e513e98dca1e689e058a80e"
 name = "applied_statistics_anova_gtk_rs"
 version = "0.1.0"
 dependencies = [
+ "execute",
  "gtk4",
  "poppler-rs",
 ]
@@ -75,6 +76,43 @@ name = "either"
 version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
+
+[[package]]
+name = "execute"
+version = "0.2.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7099ac27f7ca234fa6daac042ffc9ede4e3527fd43cfdcdb2abc3befb6192a8a"
+dependencies = [
+ "execute-command-macro",
+ "execute-command-tokens",
+ "generic-array",
+]
+
+[[package]]
+name = "execute-command-macro"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5371880151fac48751fccc4c785ab8d0ad4f589c55f76b7b0377f1c64fcf69aa"
+dependencies = [
+ "execute-command-macro-impl",
+]
+
+[[package]]
+name = "execute-command-macro-impl"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc8bee3904e0525eff0d4b168208c92ddc14a24e9eb619745b69fdac87ea4142"
+dependencies = [
+ "execute-command-tokens",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "execute-command-tokens"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e31582eb1260be08aa265f004aca0a74e1b69ce432d8e53ebd85c5c145617ece"
 
 [[package]]
 name = "field-offset"
@@ -193,6 +231,16 @@ dependencies = [
  "libc",
  "pango-sys",
  "system-deps 5.0.0",
+]
+
+[[package]]
+name = "generic-array"
+version = "0.14.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "501466ecc8a30d1d3b7fc9229b122b2ce8ed6e9d9223f1138d4babb253e51817"
+dependencies = [
+ "typenum",
+ "version_check",
 ]
 
 [[package]]
@@ -696,6 +744,12 @@ checksum = "a31142970826733df8241ef35dc040ef98c679ab14d7c3e54d827099b3acecaa"
 dependencies = [
  "serde",
 ]
+
+[[package]]
+name = "typenum"
+version = "1.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b63708a265f51345575b27fe43f9500ad611579e764c79edbc2037b1121959ec"
 
 [[package]]
 name = "ucd-trie"

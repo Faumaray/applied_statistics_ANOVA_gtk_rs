@@ -79,39 +79,7 @@ impl DataTable {
             dispersion_of_groups_by_rows: dispersion_by_rows,
         }
     }
-    pub fn print_matrix(&self) {
-        for group in &self.groups {
-            for value in &group.data {
-                print!("{:.4}\t", value);
-            }
-            println!("");
-        }
-    }
-    pub fn print_summary(&self) {
-        println!("Итоги    \tСчет     \tСумма    \tСреднее  \tДисперсия");
-        for i in 0..self.count_of_groups_by_rows.len() {
-            println!(
-                "Строка {} \t{:.0}       \t{:.4}   \t{:.4}   \t{:.4}",
-                i,
-                self.count_of_groups_by_rows[i],
-                self.sum_of_groups_by_rows[i],
-                self.mean_of_groups_by_rows[i],
-                self.dispersion_of_groups_by_rows[i]
-            );
-        }
-        println!("");
-        for i in 0..self.groups.len() {
-            println!(
-                "Столбец {} \t{:.0}       \t{:.4}   \t{:.4}   \t{:.4}",
-                i,
-                self.count_of_groups_by_columns[i],
-                self.sum_of_groups_by_columns[i],
-                self.mean_of_groups_by_columns[i],
-                self.dispersion_of_groups_by_columns[i]
-            );
-        }
-    }
-    pub fn two_way_without_reps(&self, _alfa: f64) -> ResultTwoWayWithoutReps //многофакторный дисперсионный анализ
+    pub fn two_way_without_reps(&self) -> ResultTwoWayWithoutReps //многофакторный дисперсионный анализ
     {
         let sum_for_ss_columns: f64 = self.sum_of_groups_by_columns.iter().sum();
         let count_for_ss_columns: usize = self.count_of_groups_by_columns.iter().sum();
@@ -191,7 +159,7 @@ impl DataTable {
         return ResultTwoWayWithoutReps { ss, df, ms, f, p };
     }
 
-    pub fn one_way(&self, _alfa: f64, by_column: bool) -> ResultOneWay //однофакторный дисперсионный анализ
+    pub fn one_way(&self, by_column: bool) -> ResultOneWay //однофакторный дисперсионный анализ
     {
         if by_column {
             let sum: f64 = self.sum_of_groups_by_columns.iter().sum();
@@ -315,35 +283,17 @@ impl Variable {
 }
 #[derive(Debug)]
 pub struct ResultTwoWayWithoutReps {
-    ss: SSTwoWay,
-    df: DFTwoWay,
-    ms: MSTwoWay,
-    f: FTwoWay,
-    p: PTwoWay, //f_crit: FCritTwoWay
-}
-impl std::fmt::Display for ResultTwoWayWithoutReps {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Источники  \tSS         \tdf         \tMS         \tF          \tp-значение\nСтроки     \t{:.8}\t{:.0}        \t{:.8}\t{:.8}\t{:.8}\nСтолбцы    \t{:.8}\t{:.0}        \t{:.8}\t{:.8}\t{:.8}\nПогрешность\t{:.8}\t{:.0}        \t{:.8}\nИтого      \t{:.8}\t{:.0}", 
-        self.ss.rows, self.df.rows,self.ms.rows,self.f.rows,self.p.rows,self.ss.cols, self.df.cols,self.ms.cols,self.f.cols,self.p.cols,
-        self.ss.error,self.df.error,self.ms.error,self.ss.sum,self.df.sum)
-    }
+    pub ss: SSTwoWay,
+    pub df: DFTwoWay,
+    pub ms: MSTwoWay,
+    pub f: FTwoWay,
+    pub p: PTwoWay, //f_crit: FCritTwoWay
 }
 #[derive(Debug)]
 pub struct ResultOneWay {
-    ss: SSOneWay,
-    df: DFOneWay,
-    ms: MSOneWay,
-    f: f64,
-    p: f64,
+    pub ss: SSOneWay,
+    pub df: DFOneWay,
+    pub ms: MSOneWay,
+    pub f: f64,
+    pub p: f64,
 }
-impl std::fmt::Display for ResultOneWay {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Источники  \tSS         \tdf         \tMS         \tF          \tp-значение\nМежду     \t{:.8}\t{:.0}        \t{:.8}\t{:.8}\t{:.8}\nВнутри    \t{:.8}\t{:.0}        \t{:.8}\nИтого      \t{:.8}\t{:.0}", 
-        self.ss.between, self.df.between,self.ms.between,self.f,self.p,self.ss.inside, self.df.inside,self.ms.inside,
-        self.ss.sum,self.df.sum)
-    }
-}
-/*
-Все структуры были составлены на основе результатов EXCEL, возможно нужны другие судя по "методичке"
-
-*/

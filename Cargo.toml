@@ -11,3 +11,4 @@ description = "A program for teaching students analysis of variance, created wit
 [dependencies]
 gtk = {version = "^0.3", package = "gtk4"}
 poppler-rs ="0.18.2"
+execute = "0.2.9"
